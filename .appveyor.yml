@@ -23,7 +23,7 @@ install:
 before_build:
   - mkdir build
   - cd build
-  - cmake .. -G "%cmake_generator%" -DDYNARMIC_USE_SYSTEM_BOOST=0 -DBoost_INCLUDE_DIRS=%cd%/../externals/boost -DDYNARMIC_TESTS_USE_UNICORN=ON -DUNICORN_FOUND=Yes -DLIBUNICORN_INCLUDE_DIR=%cd%/../externals/unicorn-yuzu/include -DLIBUNICORN_LIRBARY=%cd%/../externals/unicorn-yuzu/lib/x64/unicorn_dynload.lib
+  - cmake .. -G "%cmake_generator%" -DDYNARMIC_USE_SYSTEM_BOOST=0 -DBoost_INCLUDE_DIRS=%cd%/../externals/boost -DDYNARMIC_TESTS_USE_UNICORN=ON -DUNICORN_FOUND=Yes -DLIBUNICORN_INCLUDE_DIR=%cd%/../externals/unicorn-yuzu/include -DLIBUNICORN_LIBRARY=%cd%/../externals/unicorn-yuzu/lib/x64/unicorn_dynload.lib
   - cd ..
 
 build:
