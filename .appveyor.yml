@@ -16,12 +16,14 @@ install:
   - git submodule update --init --recursive
   - cd externals
   - git clone https://github.com/MerryMage/ext-boost boost
+  - ps: Start-FileDownload 'https://github.com/yuzu-emu/ext-windows-bin/raw/master/unicorn/unicorn-yuzu.7z'
+  - cmake -E tar xf unicorn-yuzu.7z
   - cd ..
 
 before_build:
   - mkdir build
   - cd build
-  - cmake .. -G "%cmake_generator%" -DDYNARMIC_USE_SYSTEM_BOOST=0 -DBoost_INCLUDE_DIRS=%cd%/../externals/boost
+  - cmake .. -G "%cmake_generator%" -DDYNARMIC_USE_SYSTEM_BOOST=0 -DBoost_INCLUDE_DIRS=%cd%/../externals/boost -DDYNARMIC_TESTS_USE_UNICORN=ON -DUNICORN_FOUND=Yes -DLIBUNICORN_INCLUDE_DIR=%cd%/../externals/unicorn-yuzu/include -DLIBUNICORN_LIRBARY=%cd%/../externals/unicorn-yuzu/lib/x64/unicorn_dynload.lib
   - cd ..
 
 build:
@@ -29,4 +31,5 @@ build:
   parallel: true
 
 test_script:
+  - cp externals/unicorn-yuzu/lib/x64/unicorn.dll build/bin/Release/
   - cd build && ctest -VV -C Release && cd ..
