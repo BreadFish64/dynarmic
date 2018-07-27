@@ -240,6 +240,8 @@ if (ARCHITECTURE_x86_64)
          backend_x64/hostloc.h
          backend_x64/jitstate_info.h
          backend_x64/oparg.h
+         backend_x64/perf_map.cpp
+         backend_x64/perf_map.h
          backend_x64/reg_alloc.cpp
          backend_x64/reg_alloc.h
     )
@@ -270,6 +272,9 @@ target_link_libraries(dynarmic
 )
 if (DYNARMIC_ENABLE_CPU_FEATURE_DETECTION)
     target_compile_definitions(dynarmic PRIVATE DYNARMIC_ENABLE_CPU_FEATURE_DETECTION=1)
+endif()
+if (DYNARMIC_EMIT_PERF_MAP)
+    target_compile_definitions(dynarmic PRIVATE DYNARMIC_EMIT_PERF_MAP=1)
 endif()
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     target_compile_definitions(dynarmic PRIVATE FMT_USE_WINDOWS_H=0)

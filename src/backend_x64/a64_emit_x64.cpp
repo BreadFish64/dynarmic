@@ -7,6 +7,7 @@
 #include <initializer_list>
 
 #include <dynarmic/A64/exclusive_monitor.h>
+#include <fmt/format.h>
 #include <fmt/ostream.h>
 
 #include "backend_x64/a64_emit_x64.h"
@@ -114,15 +115,15 @@ A64EmitX64::BlockDescriptor A64EmitX64::Emit(IR::Block& block) {
     EmitX64::EmitTerminal(block.GetTerminal(), block.Location());
     code.int3();
 
-    const A64::LocationDescriptor descriptor{block.Location()};
-    Patch(descriptor, entrypoint);
-
     const size_t size = static_cast<size_t>(code.getCurr() - entrypoint);
+
+    const A64::LocationDescriptor descriptor{block.Location()};
     const A64::LocationDescriptor end_location{block.EndLocation()};
+
     const auto range = boost::icl::discrete_interval<u64>::closed(descriptor.PC(), end_location.PC() - 1);
-    A64EmitX64::BlockDescriptor block_desc{entrypoint, size};
-    block_descriptors.emplace(descriptor.UniqueHash(), block_desc);
     block_ranges.AddRange(range, descriptor);
+
+    RegisterBlock(descriptor, entrypoint, size);
 
     return block_desc;
 }
@@ -975,6 +976,13 @@ void A64EmitX64::EmitA64ExclusiveWriteMemory64(A64EmitContext& ctx, IR::Inst* in
 
 void A64EmitX64::EmitA64ExclusiveWriteMemory128(A64EmitContext& ctx, IR::Inst* inst) {
     EmitExclusiveWrite(ctx, inst, 128);
+}
+
+std::string A64EmitX64::LocationDescriptorToFriendlyName(const IR::LocationDescriptor& ir_descriptor) {
+    const A64::LocationDescriptor descriptor{ir_descriptor};
+    return fmt::format("a64_a{:08X}_fpcr{:08X}",
+                       loc.PC(),
+                       loc.FPCR().Value());
 }
 
 void A64EmitX64::EmitTerminalImpl(IR::Term::Interpret terminal, IR::LocationDescriptor) {

@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <fmt/format.h>
 #include <fmt/ostream.h>
 
 #include <dynarmic/A32/coprocessor.h>
@@ -127,15 +128,15 @@ A32EmitX64::BlockDescriptor A32EmitX64::Emit(IR::Block& block) {
     EmitX64::EmitTerminal(block.GetTerminal(), block.Location());
     code.int3();
 
-    const A32::LocationDescriptor descriptor{block.Location()};
-    Patch(descriptor, entrypoint);
-
     const size_t size = static_cast<size_t>(code.getCurr() - entrypoint);
+
+    const A32::LocationDescriptor descriptor{block.Location()};
     const A32::LocationDescriptor end_location{block.EndLocation()};
+
     const auto range = boost::icl::discrete_interval<u32>::closed(descriptor.PC(), end_location.PC() - 1);
-    A32EmitX64::BlockDescriptor block_desc{entrypoint, size};
-    block_descriptors.emplace(descriptor.UniqueHash(), block_desc);
     block_ranges.AddRange(range, descriptor);
+
+    RegisterBlock(descriptor, entrypoint, size);
 
     return block_desc;
 }
@@ -1131,6 +1132,15 @@ void A32EmitX64::EmitA32CoprocStoreWords(A32EmitContext& ctx, IR::Inst* inst) {
     }
 
     CallCoprocCallback(code, ctx.reg_alloc, jit_interface, *action, nullptr, args[1]);
+}
+
+std::string A32EmitX64::LocationDescriptorToFriendlyName(const IR::LocationDescriptor& ir_descriptor) {
+    const A32::LocationDescriptor descriptor{ir_descriptor};
+    return fmt::format("a32_{}{:08X}_{}_fpcr{:08X}",
+                       loc.TFlag() ? "t" : "a",
+                       loc.PC(),
+                       loc.EFlag() ? "be" : "le",
+                       loc.FPSCR().Value());
 }
 
 void A32EmitX64::EmitTerminalImpl(IR::Term::Interpret terminal, IR::LocationDescriptor initial_location) {
