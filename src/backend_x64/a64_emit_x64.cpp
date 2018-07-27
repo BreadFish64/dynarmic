@@ -123,9 +123,7 @@ A64EmitX64::BlockDescriptor A64EmitX64::Emit(IR::Block& block) {
     const auto range = boost::icl::discrete_interval<u64>::closed(descriptor.PC(), end_location.PC() - 1);
     block_ranges.AddRange(range, descriptor);
 
-    RegisterBlock(descriptor, entrypoint, size);
-
-    return block_desc;
+    return RegisterBlock(descriptor, entrypoint, size);
 }
 
 void A64EmitX64::ClearCache() {

@@ -286,13 +286,15 @@ void EmitX64::EmitCondPrelude(const IR::Block& block) {
     code.L(pass);
 }
 
-void EmitX64::RegisterBlock(const IR::LocationDescriptor& descriptor, CodePtr entrypoint, size_t size) {
+BlockDescriptor EmitX64::RegisterBlock(const IR::LocationDescriptor& descriptor, CodePtr entrypoint, size_t size) {
     Patch(descriptor, entrypoint);
 
     BlockDescriptor block_desc{entrypoint, size};
     block_descriptors.emplace(descriptor.Value(), block_desc);
 
     PerfMapRegister(entrypoint, size, LocationDescriptorToFriendlyName(descriptor));
+
+    return block_desc;
 }
 
 void EmitX64::EmitTerminal(IR::Terminal terminal, IR::LocationDescriptor initial_location) {
