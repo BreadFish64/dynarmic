@@ -286,7 +286,7 @@ void EmitX64::EmitCondPrelude(const IR::Block& block) {
     code.L(pass);
 }
 
-BlockDescriptor EmitX64::RegisterBlock(const IR::LocationDescriptor& descriptor, CodePtr entrypoint, size_t size) {
+EmitX64::BlockDescriptor EmitX64::RegisterBlock(const IR::LocationDescriptor& descriptor, CodePtr entrypoint, size_t size) {
     Patch(descriptor, entrypoint);
 
     BlockDescriptor block_desc{entrypoint, size};

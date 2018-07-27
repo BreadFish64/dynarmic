@@ -1135,10 +1135,10 @@ void A32EmitX64::EmitA32CoprocStoreWords(A32EmitContext& ctx, IR::Inst* inst) {
 std::string A32EmitX64::LocationDescriptorToFriendlyName(const IR::LocationDescriptor& ir_descriptor) {
     const A32::LocationDescriptor descriptor{ir_descriptor};
     return fmt::format("a32_{}{:08X}_{}_fpcr{:08X}",
-                       loc.TFlag() ? "t" : "a",
-                       loc.PC(),
-                       loc.EFlag() ? "be" : "le",
-                       loc.FPSCR().Value());
+                       descriptor.TFlag() ? "t" : "a",
+                       descriptor.PC(),
+                       descriptor.EFlag() ? "be" : "le",
+                       descriptor.FPSCR().Value());
 }
 
 void A32EmitX64::EmitTerminalImpl(IR::Term::Interpret terminal, IR::LocationDescriptor initial_location) {

@@ -979,8 +979,8 @@ void A64EmitX64::EmitA64ExclusiveWriteMemory128(A64EmitContext& ctx, IR::Inst* i
 std::string A64EmitX64::LocationDescriptorToFriendlyName(const IR::LocationDescriptor& ir_descriptor) {
     const A64::LocationDescriptor descriptor{ir_descriptor};
     return fmt::format("a64_a{:08X}_fpcr{:08X}",
-                       loc.PC(),
-                       loc.FPCR().Value());
+                       descriptor.PC(),
+                       descriptor.FPCR().Value());
 }
 
 void A64EmitX64::EmitTerminalImpl(IR::Term::Interpret terminal, IR::LocationDescriptor) {
