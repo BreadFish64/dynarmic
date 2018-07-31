@@ -23,10 +23,12 @@ enum class Opcode {
 #define OPCODE(name, type, ...) name,
 #define A32OPC(name, type, ...) A32##name,
 #define A64OPC(name, type, ...) A64##name,
+#define Chip8OPC(name, type, ...) Chip8##name
 #include "opcodes.inc"
 #undef OPCODE
 #undef A32OPC
 #undef A64OPC
+#undef Chip8OPC
     NUM_OPCODE
 };
 

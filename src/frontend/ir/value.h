@@ -12,6 +12,7 @@
 #include "common/common_types.h"
 #include "frontend/A32/types.h"
 #include "frontend/A64/types.h"
+#include "frontend/Chip8/types.h"
 #include "frontend/ir/cond.h"
 #include "frontend/ir/type.h"
 
@@ -38,6 +39,7 @@ public:
     explicit Value(u64 value);
     explicit Value(std::array<u8, 8> value);
     explicit Value(Cond value);
+	explicit Value(Chip8::Reg value);
 
     bool IsEmpty() const;
     bool IsImmediate() const;
@@ -55,6 +57,7 @@ public:
     u64 GetU64() const;
     std::array<u8, 8> GetCoprocInfo() const;
     Cond GetCond() const;
+	Chip8::Reg GetChip8RegRef() const;
 
 private:
     Type type;
@@ -72,6 +75,7 @@ private:
         u64 imm_u64;
         std::array<u8, 8> imm_coproc;
         Cond imm_cond;
+		Chip8::Reg imm_chip8regref;
     } inner;
 };
 static_assert(sizeof(Value) <= 2 * sizeof(u64), "IR::Value should be kept small in size");

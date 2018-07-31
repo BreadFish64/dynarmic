@@ -4,11 +4,11 @@
  * General Public License version 2 or any later version.
  */
 
+#include "frontend/ir/value.h"
 #include "common/assert.h"
 #include "frontend/ir/microinstruction.h"
 #include "frontend/ir/opcodes.h"
 #include "frontend/ir/type.h"
-#include "frontend/ir/value.h"
 
 namespace Dynarmic::IR {
 
@@ -58,6 +58,10 @@ Value::Value(std::array<u8, 8> value) : type(Type::CoprocInfo) {
 
 Value::Value(Cond value) : type(Type::Cond) {
     inner.imm_cond = value;
+}
+
+Value::Value(Chip8::Reg value) : type(Type::Chip8Reg) {
+	inner.imm_chip8regref = value;
 }
 
 bool Value::IsImmediate() const {
@@ -153,6 +157,11 @@ Cond Value::GetCond() const {
         return inner.inst->GetArg(0).GetCond();
     ASSERT(type == Type::Cond);
     return inner.imm_cond;
+}
+
+Chip8::Reg Value::GetChip8RegRef() const {
+	ASSERT(type == Type::Chip8Reg);
+	return inner.imm_chip8regref;
 }
 
 } // namespace Dynarmic::IR

@@ -73,6 +73,9 @@ A64OPC(GetTPIDR,                                T::U64,                         
 A64OPC(SetTPIDR,                                T::Void,        T::U64                                          )
 A64OPC(GetTPIDRRO,                              T::U64,                                                         )
 
+// Chip8 Context getters/setters
+Chip8OPC(GetRegister,							T::U8,			T::Chip8Reg										)
+
 // Hints
 OPCODE(PushRSB,                                 T::Void,        T::U64                                          )
 

@@ -34,10 +34,12 @@ static const std::map<Opcode, Meta> opcode_info {{
 #define OPCODE(name, type, ...) { Opcode::name, { #name, type, { __VA_ARGS__ } } },
 #define A32OPC(name, type, ...) { Opcode::A32##name, { #name, type, { __VA_ARGS__ } } },
 #define A64OPC(name, type, ...) { Opcode::A64##name, { #name, type, { __VA_ARGS__ } } },
+#define Chip8OPC(name, type, ...) { Opcode::Chip8##name, { #name, type, { __VA_ARGS__ } } },
 #include "opcodes.inc"
 #undef OPCODE
 #undef A32OPC
 #undef A64OPC
+#undef Chip8OPC
 }};
 
 } // namespace OpcodeInfo

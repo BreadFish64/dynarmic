@@ -16,8 +16,8 @@
 namespace Dynarmic::IR {
 
 std::string GetNameOf(Type type) {
-    static const std::array<const char*, 16> names = {
-        "Void", "A32Reg", "A32ExtReg", "A64Reg", "A64Vec", "Opaque", "U1", "U8", "U16", "U32", "U64", "F32", "F64", "CoprocInfo", "NZCVFlags", "Cond"
+    static const std::array<const char*, 17> names = {
+        "Void", "A32Reg", "A32ExtReg", "A64Reg", "A64Vec", "Opaque", "U1", "U8", "U16", "U32", "U64", "F32", "F64", "CoprocInfo", "NZCVFlags", "Cond", "Chip8Reg"
     };
     const size_t index = static_cast<size_t>(type);
     if (index > names.size())
