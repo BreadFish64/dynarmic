@@ -7,6 +7,7 @@ add_library(dynarmic
     ../include/dynarmic/A64/a64.h
     ../include/dynarmic/A64/config.h
     ../include/dynarmic/A64/exclusive_monitor.h
+	../include/dynarmic/Chip8/chip8.h
     common/address_range.h
     common/assert.h
     common/bit_util.h
@@ -172,6 +173,7 @@ add_library(dynarmic
     frontend/A64/translate/translate.h
     frontend/A64/types.cpp
     frontend/A64/types.h
+	frontend/Chip8/decoder/chip8.h
     frontend/decoder/decoder_detail.h
     frontend/decoder/matcher.h
     frontend/ir/basic_block.cpp
