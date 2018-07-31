@@ -75,6 +75,9 @@ A64OPC(GetTPIDRRO,                              T::U64,                         
 
 // Chip8 Context getters/setters
 Chip8OPC(GetRegister,							T::U8,			T::Chip8Reg										)
+Chip8OPC(SetRegister,							T::Chip8Reg,	T::U8											)
+Chip8OPC(WritePC,								T::Void,		T::U32											)
+Chip8OPC(CallSupervisor,						T::Void,		T::U32											)
 
 // Hints
 OPCODE(PushRSB,                                 T::Void,        T::U64                                          )
@@ -517,6 +520,12 @@ A64OPC(ExclusiveWriteMemory16,                  T::U32,         T::U64,         
 A64OPC(ExclusiveWriteMemory32,                  T::U32,         T::U64,         T::U32                          )
 A64OPC(ExclusiveWriteMemory64,                  T::U32,         T::U64,         T::U64                          )
 A64OPC(ExclusiveWriteMemory128,                 T::U32,         T::U64,         T::U128                         )
+
+// Chip8 Memory access
+Chip8OPC(ReadMemory8,							T::U8,			T::U32											)
+Chip8OPC(ReadMemory16,							T::U16,			T::U32											)
+Chip8OPC(WriteMemory8,							T::Void,		T::U32,			T::U8							)
+Chip8OPC(WriteMemory16,							T::Void,		T::U32,			T::U16							)
 
 // Coprocessor
 A32OPC(CoprocInternalOperation,                 T::Void,        T::CoprocInfo                                   )

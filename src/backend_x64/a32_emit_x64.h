@@ -63,10 +63,12 @@ protected:
 #define OPCODE(...)
 #define A32OPC(name, type, ...) void EmitA32##name(A32EmitContext& ctx, IR::Inst* inst);
 #define A64OPC(...)
+#define Chip8OPC(...)
 #include "frontend/ir/opcodes.inc"
 #undef OPCODE
 #undef A32OPC
 #undef A64OPC
+#undef Chip8OPC
 
     // Terminal instruction emitters
     void EmitTerminalImpl(IR::Term::Interpret terminal, IR::LocationDescriptor initial_location) override;

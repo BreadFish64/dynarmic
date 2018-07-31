@@ -79,10 +79,12 @@ protected:
 #define OPCODE(name, type, ...) void Emit##name(EmitContext& ctx, IR::Inst* inst);
 #define A32OPC(...)
 #define A64OPC(...)
+#define Chip8OPC(...)
 #include "frontend/ir/opcodes.inc"
 #undef OPCODE
 #undef A32OPC
 #undef A64OPC
+#undef Chip8OPC
 
     // Helpers
     void EmitAddCycles(size_t cycles);

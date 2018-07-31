@@ -27,39 +27,20 @@ namespace Dynarmic::Chip8 {
 		Inst(Opcode::Chip8SetRegister, IR::Value(reg), value);
 	}
 
-	void IREmitter::ALUWritePC(const IR::U32& value) {
-		// This behaviour is ARM version-dependent.
-		// The below implementation is for ARMv6k
-		BranchWritePC(value);
-	}
-
-	void IREmitter::BranchWritePC(const IR::U32& value) {
-		if (!current_location.TFlag()) {
-			auto new_pc = And(value, Imm32(0xFFFFFFFC));
-			Inst(Opcode::A32SetRegister, IR::Value(A32::Reg::PC), new_pc);
-		}
-		else {
-			auto new_pc = And(value, Imm32(0xFFFFFFFE));
-			Inst(Opcode::A32SetRegister, IR::Value(A32::Reg::PC), new_pc);
-		}
-	}
-
-	void IREmitter::BXWritePC(const IR::U32& value) {
-		Inst(Opcode::A32BXWritePC, value);
-	}
-
-	void IREmitter::LoadWritePC(const IR::U32& value) {
-		// This behaviour is ARM version-dependent.
-		// The below implementation is for ARMv6k
-		BXWritePC(value);
+	void IREmitter::WritePC(const IR::U32& value) {
+		Inst(Opcode::Chip8WritePC, value);
 	}
 
 	void IREmitter::CallSupervisor(const IR::U32& value) {
-		Inst(Opcode::A32CallSupervisor, value);
+		Inst(Opcode::Chip8CallSupervisor, value);
 	}
 
-	void IREmitter::ExceptionRaised(const Exception exception) {
-		Inst(Opcode::A64ExceptionRaised, Imm32(PC()), Imm64(static_cast<u64>(exception)));
+	IR::U8 IREmitter::ReadMemory8(const IR::U32& vaddr) {
+		return Inst<IR::U8>(Opcode::Chip8ReadMemory8, vaddr);
+	}
+
+	IR::U16 IREmitter::ReadMemory16(const IR::U32& vaddr) {
+		return Inst<IR::U16>(Opcode::Chip8ReadMemory16, vaddr);
 	}
 
 } // namespace Dynarmic::Chip8

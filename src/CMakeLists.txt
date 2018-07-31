@@ -233,6 +233,11 @@ if (ARCHITECTURE_x86_64)
          backend_x64/block_range_information.h
          backend_x64/callback.cpp
          backend_x64/callback.h
+		 backend_x64/chip8_emit_x64.cpp
+		 backend_x64/chip8_emit_x64.h
+		 backend_x64/chip8_interface.cpp
+		 backend_x64/chip8_jitstate.cpp
+		 backend_x64/chip8_jitstate.h
          backend_x64/constant_pool.cpp
          backend_x64/constant_pool.h
          backend_x64/devirtualize.h

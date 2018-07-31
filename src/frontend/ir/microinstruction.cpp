@@ -72,6 +72,8 @@ bool Inst::IsSharedMemoryWrite() const {
     case Opcode::A64WriteMemory32:
     case Opcode::A64WriteMemory64:
     case Opcode::A64WriteMemory128:
+	case Opcode::Chip8WriteMemory8:
+	case Opcode::Chip8WriteMemory16:
         return true;
 
     default:
@@ -172,6 +174,7 @@ bool Inst::ReadsFromCoreRegister() const {
     case Opcode::A64GetD:
     case Opcode::A64GetQ:
     case Opcode::A64GetSP:
+	case Opcode::Chip8GetRegister:
         return true;
 
     default:
@@ -192,6 +195,8 @@ bool Inst::WritesToCoreRegister() const {
     case Opcode::A64SetQ:
     case Opcode::A64SetSP:
     case Opcode::A64SetPC:
+	case Opcode::Chip8SetRegister:
+	case Opcode::Chip8WritePC:
         return true;
 
     default:
@@ -365,7 +370,8 @@ bool Inst::CausesCPUException() const {
     return op == Opcode::Breakpoint        ||
            op == Opcode::A32CallSupervisor ||
            op == Opcode::A64CallSupervisor ||
-           op == Opcode::A64ExceptionRaised;
+           op == Opcode::A64ExceptionRaised||
+		   op == Opcode::Chip8CallSupervisor;
 }
 
 bool Inst::AltersExclusiveState() const {

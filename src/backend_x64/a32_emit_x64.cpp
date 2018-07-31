@@ -108,10 +108,12 @@ A32EmitX64::BlockDescriptor A32EmitX64::Emit(IR::Block& block) {
             A32EmitX64::EmitA32##name(ctx, inst);  \
             break;
 #define A64OPC(...)
+#define Chip8OPC(...)
 #include "frontend/ir/opcodes.inc"
 #undef OPCODE
 #undef A32OPC
 #undef A64OPC
+#undef Chip8OPC
 
         default:
             ASSERT_MSG(false, "Invalid opcode: {}", inst->GetOpcode());

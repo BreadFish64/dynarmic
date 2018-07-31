@@ -17,7 +17,7 @@ template <typename Visitor>
 using Chip8Matcher = Decoder::Matcher<Visitor, u16>;
 
 template <typename V>
-std::vector<Chip8Matcher<V>> GetArmDecodeTable() {
+std::vector<Chip8Matcher<V>> GetChip8DecodeTable() {
     std::vector<Chip8Matcher<V>> table = {
 
 #define INST(fn, name, bitstring)                                                                  \

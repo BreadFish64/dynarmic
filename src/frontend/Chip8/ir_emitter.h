@@ -29,28 +29,14 @@ namespace Dynarmic::Chip8 {
 		IR::U32 GetRegister(Reg source_reg);
 		void SetRegister(const Reg dest_reg, const IR::U32& value);
 
-		void ALUWritePC(const IR::U32& value);
-		void BranchWritePC(const IR::U32& value);
-		void BXWritePC(const IR::U32& value);
-		void LoadWritePC(const IR::U32& value);
+		void WritePC(const IR::U32& value);
 
 		void CallSupervisor(const IR::U32& value);
-		void ExceptionRaised(Exception exception);
 
-		void ClearExclusive();
-		void SetExclusive(const IR::U32& vaddr, size_t byte_size);
 		IR::U8 ReadMemory8(const IR::U32& vaddr);
 		IR::U16 ReadMemory16(const IR::U32& vaddr);
-		IR::U32 ReadMemory32(const IR::U32& vaddr);
-		IR::U64 ReadMemory64(const IR::U32& vaddr);
 		void WriteMemory8(const IR::U32& vaddr, const IR::U8& value);
 		void WriteMemory16(const IR::U32& vaddr, const IR::U16& value);
-		void WriteMemory32(const IR::U32& vaddr, const IR::U32& value);
-		void WriteMemory64(const IR::U32& vaddr, const IR::U64& value);
-		IR::U32 ExclusiveWriteMemory8(const IR::U32& vaddr, const IR::U8& value);
-		IR::U32 ExclusiveWriteMemory16(const IR::U32& vaddr, const IR::U16& value);
-		IR::U32 ExclusiveWriteMemory32(const IR::U32& vaddr, const IR::U32& value);
-		IR::U32 ExclusiveWriteMemory64(const IR::U32& vaddr, const IR::U32& value_lo, const IR::U32& value_hi);
 	};
 
 } // namespace Dynarmic::Chip8
