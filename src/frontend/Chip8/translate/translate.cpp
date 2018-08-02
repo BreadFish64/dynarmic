@@ -5,38 +5,35 @@
 #include "frontend/Chip8/decoder/chip8.h"
 #include "frontend/Chip8/location_descriptor.h"
 #include "frontend/Chip8/translate/translate.h""
+#include "frontend/Chip8/translate/translate_chip8/translate_chip8.h"
 #include "frontend/Chip8/types.h"
 #include "frontend/ir/basic_block.h"
 
 namespace Dynarmic::Chip8 {
 
-	static bool CondCanContinue(ConditionalState cond_state, const A32::IREmitter& ir) {
+	static bool CondCanContinue(ConditionalState cond_state, const Chip8::IREmitter& ir) {
 		ASSERT_MSG(cond_state != ConditionalState::Break, "Should never happen.");
 
-		if (cond_state == ConditionalState::None)
+		/*if (cond_state == ConditionalState::None)
 			return true;
 
 		// TODO: This is more conservative than necessary.
-		return std::all_of(ir.block.begin(), ir.block.end());
+		return std::all_of(ir.block.begin(), ir.block.end(), [](const IR::Inst& inst) { return !inst.WritesToCPSR(); });*/
 	}
 
-	IR::Block TranslateArm(LocationDescriptor descriptor, MemoryReadCodeFuncType memory_read_code) {
+	IR::Block TranslateChip8(LocationDescriptor descriptor, MemoryReadCodeFuncType memory_read_code) {
 		IR::Block block{ descriptor };
-		ArmTranslatorVisitor visitor{ block, descriptor };
+		Chip8TranslatorVisitor visitor{ block, descriptor };
 
 		bool should_continue = true;
 		while (should_continue && CondCanContinue(visitor.cond_state, visitor.ir)) {
-			const u32 arm_pc = visitor.ir.current_location.PC();
-			const u32 arm_instruction = memory_read_code(arm_pc);
+			const u32 chip8_pc = visitor.ir.current_location.PC();
+			const u32 chip8_instruction = memory_read_code(chip8_pc);
 
-			if (auto vfp_decoder = DecodeVFP2<ArmTranslatorVisitor>(arm_instruction)) {
-				should_continue = vfp_decoder->call(visitor, arm_instruction);
-			}
-			else if (auto decoder = DecodeArm<ArmTranslatorVisitor>(arm_instruction)) {
-				should_continue = decoder->call(visitor, arm_instruction);
-			}
-			else {
-				should_continue = visitor.arm_UDF();
+			if (auto decoder = DecodeChip8<Chip8TranslatorVisitor>(chip8_instruction)) {
+				should_continue = decoder->call(visitor, chip8_instruction);
+			} else {
+				should_continue = visitor.UndefinedInstruction();
 			}
 
 			if (visitor.cond_state == ConditionalState::Break) {
@@ -60,7 +57,7 @@ namespace Dynarmic::Chip8 {
 		return block;
 	}
 
-	bool ArmTranslatorVisitor::ConditionPassed(Cond cond) {
+	bool Chip8TranslatorVisitor::ConditionPassed(Cond cond) {
 		ASSERT_MSG(cond_state != ConditionalState::Break,
 			"This should never happen. We requested a break but that wasn't honored.");
 		ASSERT_MSG(cond != Cond::NV, "NV conditional is obsolete");
@@ -107,53 +104,19 @@ namespace Dynarmic::Chip8 {
 		return true;
 	}
 
-	bool ArmTranslatorVisitor::InterpretThisInstruction() {
+	bool Chip8TranslatorVisitor::InterpretThisInstruction() {
 		ir.SetTerm(IR::Term::Interpret(ir.current_location));
 		return false;
 	}
 
-	bool ArmTranslatorVisitor::UnpredictableInstruction() {
-		ir.ExceptionRaised(Exception::UnpredictableInstruction);
-		ir.SetTerm(IR::Term::CheckHalt{ IR::Term::ReturnToDispatch{} });
-		return false;
-	}
-
-	bool ArmTranslatorVisitor::UndefinedInstruction() {
-		ir.ExceptionRaised(Exception::UndefinedInstruction);
-		ir.SetTerm(IR::Term::CheckHalt{ IR::Term::ReturnToDispatch{} });
-		return false;
-	}
-
-	IR::ResultAndCarry<IR::U32> ArmTranslatorVisitor::EmitImmShift(IR::U32 value, ShiftType type, Imm5 imm5, IR::U1 carry_in) {
+	IR::ResultAndCarry<IR::U8> Chip8TranslatorVisitor::EmitShift(IR::U8 value, ShiftType type, IR::U1 carry_in) {
 		switch (type) {
 		case ShiftType::LSL:
-			return ir.LogicalShiftLeft(value, ir.Imm8(imm5), carry_in);
+			IR::ResultAndCarry<IR::U32> temp = ir.LogicalShiftLeft(IR::U32(value), ir.Imm8(1), carry_in);
+			return { ir.LeastSignificantByte(temp.result) , temp.carry};
 		case ShiftType::LSR:
-			imm5 = imm5 ? imm5 : 32;
-			return ir.LogicalShiftRight(value, ir.Imm8(imm5), carry_in);
-		case ShiftType::ASR:
-			imm5 = imm5 ? imm5 : 32;
-			return ir.ArithmeticShiftRight(value, ir.Imm8(imm5), carry_in);
-		case ShiftType::ROR:
-			if (imm5)
-				return ir.RotateRight(value, ir.Imm8(imm5), carry_in);
-			else
-				return ir.RotateRightExtended(value, carry_in);
-		}
-		ASSERT_MSG(false, "Unreachable");
-		return {};
-	}
-
-	IR::ResultAndCarry<IR::U32> ArmTranslatorVisitor::EmitRegShift(IR::U32 value, ShiftType type, IR::U8 amount, IR::U1 carry_in) {
-		switch (type) {
-		case ShiftType::LSL:
-			return ir.LogicalShiftLeft(value, amount, carry_in);
-		case ShiftType::LSR:
-			return ir.LogicalShiftRight(value, amount, carry_in);
-		case ShiftType::ASR:
-			return ir.ArithmeticShiftRight(value, amount, carry_in);
-		case ShiftType::ROR:
-			return ir.RotateRight(value, amount, carry_in);
+			IR::ResultAndCarry<IR::U32> temp = ir.LogicalShiftRight(IR::U32(value), ir.Imm8(1), carry_in);
+			return { ir.LeastSignificantByte(temp.result) , temp.carry };
 		}
 		ASSERT_MSG(false, "Unreachable");
 		return {};

@@ -67,15 +67,15 @@ namespace Dynarmic::BackendX64 {
         case IR::Opcode::name:                  \
             Chip8EmitX64::Emit##name(ctx, inst);  \
             break;
+#define A32OPC(...)
+#define A64OPC(...)
 #define Chip8OPC(name, type, ...)                    \
         case IR::Opcode::Chip8##name:                \
             Chip8EmitX64::EmitChip8##name(ctx, inst);  \
             break;
-#define A64OPC(...)
-#define Chip8OPC(...)
 #include "frontend/ir/opcodes.inc"
 #undef OPCODE
-#undef Chip8OPC
+#undef A32OPC
 #undef A64OPC
 #undef Chip8OPC
 

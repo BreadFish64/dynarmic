@@ -181,6 +181,9 @@ add_library(dynarmic
 	frontend/Chip8/location_descriptor.h
 	frontend/Chip8/translate/translate.cpp
 	frontend/Chip8/translate/translate.h
+	frontend/Chip8/translate/translate_chip8/exception_generating.cpp
+	frontend/Chip8/translate/translate_chip8/translate_chip8.cpp
+	frontend/Chip8/translate/translate_chip8/translate_chip8.h
 	frontend/Chip8/types.cpp
 	frontend/Chip8/types.h
     frontend/decoder/decoder_detail.h

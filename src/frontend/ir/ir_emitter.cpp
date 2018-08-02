@@ -4,8 +4,8 @@
  * General Public License version 2 or any later version.
  */
 
-#include "common/assert.h"
 #include "frontend/ir/ir_emitter.h"
+#include "common/assert.h"
 #include "frontend/ir/opcodes.h"
 
 namespace Dynarmic::IR {
@@ -129,10 +129,22 @@ ResultAndCarry<U32> IREmitter::LogicalShiftLeft(const U32& value_in, const U8& s
     return {result, carry_out};
 }
 
+ResultAndCarry<U8> IREmitter::LogicalShiftLeft(const U8& value_in, const U8& shift_amount, const U1& carry_in) {
+	auto result = Inst<U8>(Opcode::LogicalShiftLeft8, value_in, shift_amount, carry_in);
+	auto carry_out = Inst<U1>(Opcode::GetCarryFromOp, result);
+	return { result, carry_out };
+}
+
 ResultAndCarry<U32> IREmitter::LogicalShiftRight(const U32& value_in, const U8& shift_amount, const U1& carry_in) {
     auto result = Inst<U32>(Opcode::LogicalShiftRight32, value_in, shift_amount, carry_in);
     auto carry_out = Inst<U1>(Opcode::GetCarryFromOp, result);
     return {result, carry_out};
+}
+
+ResultAndCarry<U8> IREmitter::LogicalShiftRight(const U8& value_in, const U8& shift_amount, const U1& carry_in) {
+	auto result = Inst<U8>(Opcode::LogicalShiftRight8, value_in, shift_amount, carry_in);
+	auto carry_out = Inst<U1>(Opcode::GetCarryFromOp, result);
+	return { result, carry_out };
 }
 
 ResultAndCarry<U32> IREmitter::ArithmeticShiftRight(const U32& value_in, const U8& shift_amount, const U1& carry_in) {

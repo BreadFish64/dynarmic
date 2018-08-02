@@ -44,7 +44,6 @@ std::vector<Chip8Matcher<V>> GetChip8DecodeTable() {
         INST(&V::chip8_SHR_X, "SHR (Vx)", "1000xxxx----0110"),
         INST(&V::chip8_SUBN_XY, "SUBN (Vx, Vy)", "1000xxxxyyyy0111"),
         INST(&V::chip8_SHL_X, "SHL (Vx)", "1000xxxx----1110"),
-        INST(&V::chip8_AND_XY, "AND (Vx, Vy)", "1000xxxxyyyy0002"),
         INST(&V::chip8_ADD_IX, "ADD (I, Vx)", "1111xxxx00011110"),
 
         // Load/Store instructions
@@ -64,8 +63,8 @@ std::vector<Chip8Matcher<V>> GetChip8DecodeTable() {
 
         // Miscellaneous instructions
         INST(&V::chip8_CLS, "CLS", "0000000011100000"),
-        INST(&V::chip8_RNDXB, "RND (Vx, byte)", "1100xxxxkkkkkkkk"),
-        INST(&V::chip8_DRWXYN, "DRW (Vx, Vy, nibble)", "1101xxxxyyyynnnn"),
+        INST(&V::chip8_RND_XB, "RND (Vx, byte)", "1100xxxxkkkkkkkk"),
+        INST(&V::chip8_DRW_XYN, "DRW (Vx, Vy, nibble)", "1101xxxxyyyynnnn"),
 
 #undef INST
     };

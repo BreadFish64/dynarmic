@@ -40,6 +40,7 @@ namespace Dynarmic::Chip8 {
 	using Imm4 = u8;
 	using Imm8 = u8;
 	using Imm12 = u16;
+	using Imm16 = u16;
 	using RegList = u32;
 
 	enum class ShiftType {

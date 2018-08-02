@@ -15,11 +15,8 @@ namespace Dynarmic::Chip8 {
 		return static_cast<u32>(pc - pc % alignment);
 	}
 
-	IR::U32 IREmitter::GetRegister(Reg reg) {
-		if (reg == Chip8::Reg::PC) {
-			return Imm32(PC());
-		}
-		return Inst<IR::U32>(Opcode::Chip8GetRegister, IR::Value(reg));
+	IR::U8 IREmitter::GetRegister(Reg reg) {
+		return Inst<IR::U8>(Opcode::Chip8GetRegister, IR::Value(reg));
 	}
 
 	void IREmitter::SetRegister(const Reg reg, const IR::U32& value) {

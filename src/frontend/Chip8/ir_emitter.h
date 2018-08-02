@@ -26,7 +26,7 @@ namespace Dynarmic::Chip8 {
 		u32 PC();
 		u32 AlignPC(size_t alignment);
 
-		IR::U32 GetRegister(Reg source_reg);
+		IR::U8 GetRegister(Reg source_reg);
 		void SetRegister(const Reg dest_reg, const IR::U32& value);
 
 		void WritePC(const IR::U32& value);
