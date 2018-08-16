@@ -83,6 +83,22 @@ constexpr bool Bit(const T value) {
     return Bit<T>(bit_position, value);
 }
 
+/// Reinterpret objects of one type as another by bit-casting between object representations.
+template <typename To, typename From>
+inline To BitCast(const From& source) noexcept
+{
+	static_assert(sizeof(From) == sizeof(To),
+		"BitCast source and destination types must be equal in size.");
+	static_assert(std::is_trivially_copyable<From>(),
+		"BitCast source type must be trivially copyable.");
+	static_assert(std::is_trivially_copyable<To>(),
+		"BitCast destination type must be trivially copyable.");
+
+	std::aligned_storage_t<sizeof(To), alignof(To)> storage;
+	std::memcpy(&storage, &source, sizeof(storage));
+	return reinterpret_cast<To&>(storage);
+}
+
 /// Clears a single bit at bit_position from value of type T.
 template<typename T>
 inline T ClearBit(size_t bit_position, const T value) {

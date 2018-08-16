@@ -49,7 +49,7 @@ static u8 RecipSqrtEstimate(u64 a) {
             }
 
             // Round to nearest u0.8 (with implied set integer bit).
-            result[i] = static_cast<u8>((b + 1) / 2);
+            result[static_cast<LUT::size_type>(i)] = static_cast<u8>((b + 1) / 2);
         }
         return result;
     }();

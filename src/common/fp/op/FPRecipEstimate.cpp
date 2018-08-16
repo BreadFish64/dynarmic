@@ -34,12 +34,12 @@ static u8 RecipEstimate(u64 a) {
 
             a = a * 2 + 1;
             u64 b = (1u << 19) / a;
-            result[i] = static_cast<u8>((b + 1) / 2);
+            result[static_cast<LUT::size_type>(i)] = static_cast<u8>((b + 1) / 2);
         }
         return result;
     }();
 
-    return lut[a - lut_offset];
+    return lut[static_cast<LUT::size_type>(a - lut_offset)];
 }
 
 template<typename FPT>

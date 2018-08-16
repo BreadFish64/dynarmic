@@ -205,52 +205,59 @@ add_library(dynarmic
 
 if (ARCHITECTURE_x86_64)
     target_sources(dynarmic PRIVATE
-         backend_x64/a32_emit_x64.cpp
-         backend_x64/a32_emit_x64.h
-         backend_x64/a32_interface.cpp
-         backend_x64/a32_jitstate.cpp
-         backend_x64/a32_jitstate.h
-         backend_x64/a64_emit_x64.cpp
-         backend_x64/a64_emit_x64.h
-         backend_x64/a64_exclusive_monitor.cpp
-         backend_x64/a64_interface.cpp
-         backend_x64/a64_jitstate.cpp
-         backend_x64/a64_jitstate.h
-         backend_x64/abi.cpp
-         backend_x64/abi.h
-         backend_x64/block_of_code.cpp
-         backend_x64/block_of_code.h
-         backend_x64/block_range_information.cpp
-         backend_x64/block_range_information.h
-         backend_x64/callback.cpp
-         backend_x64/callback.h
-         backend_x64/constant_pool.cpp
-         backend_x64/constant_pool.h
-         backend_x64/devirtualize.h
-         backend_x64/emit_x64.cpp
-         backend_x64/emit_x64.h
-         backend_x64/emit_x64_aes.cpp
-         backend_x64/emit_x64_crc32.cpp
-         backend_x64/emit_x64_data_processing.cpp
-         backend_x64/emit_x64_floating_point.cpp
-         backend_x64/emit_x64_packed.cpp
-         backend_x64/emit_x64_saturation.cpp
-         backend_x64/emit_x64_sm4.cpp
-         backend_x64/emit_x64_vector.cpp
-         backend_x64/emit_x64_vector_floating_point.cpp
-         backend_x64/hostloc.cpp
-         backend_x64/hostloc.h
-         backend_x64/jitstate_info.h
-         backend_x64/oparg.h
-         backend_x64/reg_alloc.cpp
-         backend_x64/reg_alloc.h
+         backend/X64/a32_emit_x64.cpp
+         backend/X64/a32_emit_x64.h
+         backend/X64/a32_interface.cpp
+         backend/X64/a32_jitstate.cpp
+         backend/X64/a32_jitstate.h
+         backend/X64/a64_emit_x64.cpp
+         backend/X64/a64_emit_x64.h
+         backend/X64/a64_exclusive_monitor.cpp
+         backend/X64/a64_interface.cpp
+         backend/X64/a64_jitstate.cpp
+         backend/X64/a64_jitstate.h
+         backend/X64/abi.cpp
+         backend/X64/abi.h
+         backend/X64/block_of_code.cpp
+         backend/X64/block_of_code.h
+         backend/X64/block_range_information.cpp
+         backend/X64/block_range_information.h
+         backend/X64/callback.cpp
+         backend/X64/callback.h
+         backend/X64/constant_pool.cpp
+         backend/X64/constant_pool.h
+         backend/X64/devirtualize.h
+         backend/X64/emit_x64.cpp
+         backend/X64/emit_x64.h
+         backend/X64/emit_x64_aes.cpp
+         backend/X64/emit_x64_crc32.cpp
+         backend/X64/emit_x64_data_processing.cpp
+         backend/X64/emit_x64_floating_point.cpp
+         backend/X64/emit_x64_packed.cpp
+         backend/X64/emit_x64_saturation.cpp
+         backend/X64/emit_x64_sm4.cpp
+         backend/X64/emit_x64_vector.cpp
+         backend/X64/emit_x64_vector_floating_point.cpp
+         backend/X64/hostloc.cpp
+         backend/X64/hostloc.h
+         backend/X64/jitstate_info.h
+         backend/X64/oparg.h
+         backend/X64/reg_alloc.cpp
+         backend/X64/reg_alloc.h
     )
 
     if (WIN32)
-        target_sources(dynarmic PRIVATE backend_x64/exception_handler_windows.cpp)
+        target_sources(dynarmic PRIVATE backend/X64/exception_handler_windows.cpp)
     else()
-        target_sources(dynarmic PRIVATE backend_x64/exception_handler_generic.cpp)
+        target_sources(dynarmic PRIVATE backend/X64/exception_handler_generic.cpp)
     endif()
+elseif(ARCHITECTURE_Aarch64)
+    target_sources(dynarmic PRIVATE
+         backend/A64/dolphin_emitter/a64_emitter.cpp
+		 backend/A64/dolphin_emitter/a64_emitter.h
+		 backend/A64/dolphin_emitter/arm_common.h
+		 backend/A64/dolphin_emitter/code_block.h
+    )
 else()
     message(FATAL_ERROR "Unsupported architecture")
 endif()

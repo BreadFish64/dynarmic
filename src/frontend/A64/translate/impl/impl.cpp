@@ -4,9 +4,9 @@
  * General Public License version 2 or any later version.
  */
 
+#include "frontend/A64/translate/impl/impl.h"
 #include "common/bit_util.h"
 #include "frontend/ir/terminal.h"
-#include "frontend/A64/translate/impl/impl.h"
 
 namespace Dynarmic::A64 {
 
@@ -55,7 +55,7 @@ boost::optional<TranslatorVisitor::BitMasks> TranslatorVisitor::DecodeBitMasks(b
 
     size_t esize = static_cast<size_t>(1) << len;
     u64 welem = Common::Ones<u64>(S + 1);
-    u64 telem = Common::Ones<u64>(d + 1);
+    u64 telem = Common::Ones<u64>(static_cast<size_t>(d + 1));
     u64 wmask = Common::RotateRight(Common::Replicate(welem, esize), R);
     u64 tmask = Common::Replicate(telem, esize);
 

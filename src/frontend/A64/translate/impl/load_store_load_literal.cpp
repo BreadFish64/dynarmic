@@ -28,7 +28,7 @@ bool TranslatorVisitor::LDR_lit_fpsimd(Imm<2> opc, Imm<19> imm19, Vec Vt) {
     const u64 size = 4 << opc.ZeroExtend();
     const u64 offset = imm19.SignExtend<u64>() << 2;
     const IR::U64 address = ir.Imm64(ir.PC() + offset);
-    const IR::UAnyU128 data = Mem(address, size, AccType::VEC);
+    const IR::UAnyU128 data = Mem(address, static_cast<size_t>(size), AccType::VEC);
 
     if (size == 16) {
         V(128, Vt, data);
