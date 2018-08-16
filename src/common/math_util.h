@@ -24,5 +24,10 @@ constexpr T Sum(T first, Ts&&... rest) {
     }
 }
 
+template <typename T>
+constexpr bool IsPow2(T imm){
+    return imm > 0 && (imm & (imm - 1)) == 0;
+}
+
 } // namespace Common
 } // namespace Dynarmic
