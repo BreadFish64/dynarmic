@@ -253,7 +253,7 @@ if (ARCHITECTURE_x86_64)
     else()
         target_sources(dynarmic PRIVATE backend/x64/exception_handler_generic.cpp)
     endif()
-elseif(ARCHITECTURE_Aarch64)
+elseif(ARCHITECTURE_Aarch64 OR ARCHITECTURE_ARM64)
     target_sources(dynarmic PRIVATE
          backend/A64/emitter/a64_emitter.cpp
          backend/A64/emitter/a64_emitter.h

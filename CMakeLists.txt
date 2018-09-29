@@ -1,4 +1,9 @@
-cmake_minimum_required(VERSION 3.8)
+# Android studio currently ships with CMake 3.6
+if(ANDROID)
+    cmake_minimum_required(VERSION 3.6)
+else()
+    cmake_minimum_required(VERSION 3.8)
+endif()
 project(dynarmic CXX)
 
 # Determine if we're built as a subproject (using add_subdirectory)
@@ -21,10 +26,12 @@ if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "Defaulting to a Release build")
 endif()
 
+if(NOT ANDROID)
 # Set hard requirements for C++
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
 
 # Warn on CMake API deprecations
 set(CMAKE_WARN_DEPRECATED ON)
@@ -80,6 +87,11 @@ else()
         -pedantic-errors
         -Wfatal-errors
         -Wno-missing-braces)
+
+    if(ANDROID)
+        list(APPEND DYNARMIC_CXX_FLAGS
+                -std=c++17)
+    endif()
 
     if (DYNARMIC_WARNINGS_AS_ERRORS)
         list(APPEND DYNARMIC_CXX_FLAGS
