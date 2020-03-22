@@ -812,10 +812,10 @@ static void ReadMemory(BlockOfCode& code, RegAlloc& reg_alloc, IR::Inst* inst, c
 
     reg_alloc.UseScratch(args[0], ABI_PARAM2);
 
-    Xbyak::Reg64 vaddr = code.ABI_PARAM2;
-    Xbyak::Reg64 value = reg_alloc.ScratchGpr({ABI_RETURN});
+    const Xbyak::Reg64 vaddr = code.ABI_PARAM2;
+    const Xbyak::Reg64 value = reg_alloc.ScratchGpr({ABI_RETURN});
     
-    auto src_ptr = EmitVAddrLookup(code, reg_alloc, config, abort, vaddr, value);
+    const auto src_ptr = EmitVAddrLookup(code, reg_alloc, config, abort, vaddr, value);
     switch (bit_size) {
     case 8:
         code.movzx(value.cvt32(), code.byte[src_ptr]);
@@ -858,10 +858,10 @@ static void WriteMemory(BlockOfCode& code, RegAlloc& reg_alloc, IR::Inst* inst, 
     reg_alloc.UseScratch(args[0], ABI_PARAM2);
     reg_alloc.UseScratch(args[1], ABI_PARAM3);
 
-    Xbyak::Reg64 vaddr = code.ABI_PARAM2;
-    Xbyak::Reg64 value = code.ABI_PARAM3;
+    const Xbyak::Reg64 vaddr = code.ABI_PARAM2;
+    const Xbyak::Reg64 value = code.ABI_PARAM3;
 
-    auto dest_ptr = EmitVAddrLookup(code, reg_alloc, config, abort, vaddr);
+    const auto dest_ptr = EmitVAddrLookup(code, reg_alloc, config, abort, vaddr);
     switch (bit_size) {
     case 8:
         code.mov(code.byte[dest_ptr], value.cvt8());
